@@ -1,17 +1,19 @@
+const PLAYER_1: char = 'x';
+const PLAYER_2: char = 'o';
+const EMPTY: char = '▢';
+
 fn main() {
-    // println!("You typed: {}", get_user_input());
-    let manager = Manager::new('x', 'o', '▢');
-    let board = Board::new(manager);
+    let board = Board::new();
 
     board.draw();
     init_turn(board);
 }
 
 fn init_turn(mut board: Board) {
-  println!("{}'s turn, where would you like to go? e.g. A1 ", board.manager.player);
+  println!("{}'s turn, where would you like to go? e.g. A1 ", board.player);
   let pos = get_user_input().to_lowercase();
-  board.set_val(pos, board.manager.player, -1);
-  board.manager.swap_player();
+  board.set_val(pos, board.player, -1);
+  board.swap_player();
 
   check_game(board);
 }
@@ -47,21 +49,25 @@ fn game_over(winner: char) {
 
 struct Board {
   board: [char; 9],
-  manager: Manager,
+  player: char,
+  swap: bool,
 }
 
 impl Board {
-  fn new(manager: Manager) -> Board {
+  fn new() -> Board {
     Board {
-      board: [manager.empty; 9],
-      manager: manager,
+      board: [EMPTY; 9],
+      player: PLAYER_1,
+      swap: false,
     }
   }
 
+  #[allow(dead_code)]
   fn get_size(&self) -> usize {
       self.board.len()
   }
 
+  #[allow(dead_code)]
   fn get_val(&self, pos: usize) -> char {
     self.board[pos]
   }
@@ -80,12 +86,12 @@ impl Board {
       else { i = -2; }
     }
 
-    if i != -2 && self.board[i as usize] == self.manager.empty {
+    if i != -2 && self.board[i as usize] == EMPTY {
       self.board[i as usize] = player;
-      self.manager.swap = true;
+      self.swap = true;
       self.draw();
     } else {
-      println!("Position doesn't exist or spot is already taken. Please chose another position.");
+      println!("Position doesn't exist or spot is already taken. Please choose another position.");
       self.draw();
     }
   }
@@ -97,9 +103,20 @@ impl Board {
     println!("C {0} {1} {2}", self.board[6], self.board[7], self.board[8]);
   }
 
+  fn swap_player(&mut self) {
+    if self.swap {
+      if self.player == PLAYER_1 {
+        self.player = PLAYER_2;
+      } else {
+        self.player = PLAYER_1;
+      }
+      self.swap = false;
+    }
+  }
+
   fn check_game(&self) -> (char, bool) {
       let mut w = self.board[4];
-      if w == self.manager.empty { w = '-'; }
+      if w == EMPTY { w = '-'; }
 
       if self.board[0] == w && self.board[8] == w { return (w, true); } // LT-RB Diagonal
       else if self.board[2] == w && self.board[6] == w { return (w, true); } // LB-RT Diagonal
@@ -107,13 +124,13 @@ impl Board {
       else if self.board[1] == w && self.board[7] == w { return (w, true); } // Center Vertical
 
       w = self.board[0];
-      if w == self.manager.empty { w = '-'; }
+      if w == EMPTY { w = '-'; }
 
       if self.board[1] == w && self.board[2] == w { return (w, true); } // Top Horizontal
       else if self.board[3] == w && self.board[6] == w { return (w, true ); } // Left Vertical
 
       w = self.board[8];
-      if w == self.manager.empty { w = '-'; }
+      if w == EMPTY { w = '-'; }
 
       if self.board[6] == w && self.board[7] == w { return (w, true); } // Bottom Horizontal
       else if self.board[2] == w && self.board[5] == w { return (w, true ); } // Right Vertical
@@ -121,50 +138,14 @@ impl Board {
       // Tie Check
       let mut is_full = true;
       for pos in &self.board {
-        if pos == &self.manager.empty { is_full = false; }
+        if pos == &EMPTY { is_full = false; }
       }
 
       if is_full {
-        return (self.manager.empty, true);
+        return (EMPTY, true);
       } else {
-        return (self.manager.empty, false);
+        return (EMPTY, false);
       }
-
-  }
-}
-
-/********************
-*** Manager Class ***
-********************/
-
-struct Manager {
-  player: char,
-  player_1: char,
-  player_2: char,
-  empty: char,
-  swap: bool,
-}
-
-impl Manager {
-  fn new(player_1: char, player_2: char, empty: char) -> Manager {
-    Manager {
-      player: player_1,
-      player_1: player_1,
-      player_2: player_2,
-      empty: empty,
-      swap: false,
-    }
-  }
-
-  fn swap_player(&mut self) {
-    if self.swap {
-      if self.player == self.player_1 {
-        self.player = self.player_2;
-      } else {
-        self.player = self.player_1;
-      }
-      self.swap = false;
-    }
   }
 }
 
