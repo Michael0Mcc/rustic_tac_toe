@@ -52,10 +52,12 @@ impl Board {
   }
 
   pub fn draw(&self) {
+    println!();
     println!("  1 2 3");
     println!("A {0} {1} {2}", self.board[0], self.board[1], self.board[2]);
     println!("B {0} {1} {2}", self.board[3], self.board[4], self.board[5]);
     println!("C {0} {1} {2}", self.board[6], self.board[7], self.board[8]);
+    println!();
   }
 
   pub fn swap_player(&mut self) {
