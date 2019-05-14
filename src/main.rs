@@ -2,10 +2,10 @@ mod board;
 use board::Board as Board;
 
 fn main() {
-    let board = Board::new();
+  let board = Board::new();
 
-    board.draw();
-    init_turn(board);
+  board.draw();
+  init_turn(board);
 }
 
 fn init_turn(mut board: Board) {
