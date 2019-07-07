@@ -1,6 +1,6 @@
-const PLAYER_1: char = 'x';
-const PLAYER_2: char = 'o';
-const EMPTY: char = '▢';
+pub const PLAYER_1: char = 'x';
+pub const PLAYER_2: char = 'o';
+pub const EMPTY: char = '▢';
 
 pub struct Board {
   pub board: [char; 9],
