@@ -2,7 +2,6 @@ pub const PLAYER_1: char = 'x';
 pub const PLAYER_2: char = 'o';
 pub const EMPTY: char = '▢';
 
-#[derive(Debug, Copy, Clone)]
 pub struct Board {
   pub board: [char; 9],
   pub player: char,

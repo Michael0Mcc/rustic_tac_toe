@@ -11,8 +11,7 @@ fn main() {
 
 fn init_turn(board: &mut board::Board) {
   println!("{}'s turn, where would you like to go? e.g. A1 ", board.player);
-  let cb = *board;
-  if board.player == 'o' { println!("{}", ai::minimax(cb, board.player)); }
+  if board.player == 'o' { println!("{:?}", ai::minimax(board, board.player)); }
   let pos = get_user_input().to_lowercase();
   board.set_val(pos, board.player, -1);
   board.swap_player();
